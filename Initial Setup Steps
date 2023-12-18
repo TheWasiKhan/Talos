@@ -1,0 +1,12 @@
+Project Initial Setup Steps:
+ 
+1.	Insert Data into ProfessionalType
+2.	Add field to Login page from /admin/ Panel.(Social applications)
+3.	Insert Data into MstFlag
+4.	Insert Data into University
+5.	Insert Data into College
+6.	Insert Data into MenuItems
+7.	Create Roles
+8.	Create these Groups only (Admin, Doctor, Patient, Front-Desk)
+9.	Insert Weblink values to the MenuItems with the help of urls.py by /admin/ page.
+10.     Insert records in MstThirdPartyCollab.
