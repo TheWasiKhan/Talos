@@ -1,0 +1,894 @@
+{% extends 'account/base.html' %}
+{% load i18n %}
+{% block head_title %}{% trans "Book Appointments" %}{% endblock head_title %}
+{% block content %}
+{% load static %}
+<style>
+    .navbar a {
+        color: white;
+    }
+
+    .navbar-nav a {
+        color: white;
+    }
+
+    .btn-gr {
+        background: linear-gradient(45deg, #003a70, #ec0909);
+    }
+
+    .btn-gr:hover {
+        background: linear-gradient(45deg, #003a70, #6ecbc9);
+    }
+
+    .btn-grr {
+        background: linear-gradient(45deg, #6ecbc9, #003a70);
+    }
+
+    .btn-grr:hover {
+        background: linear-gradient(45deg, #ec0909, #003a70);
+    }
+
+    .btn-theme {
+        background-color: #003a70;
+        color: white;
+    }
+
+    .btn-theme:hover {
+        background-color: #003789 !important;
+        color: white !important;
+    }
+
+    .btn-outline-theme {
+        background-color: transparent;
+        border: 1px solid #003a70;
+        color: #003a70;
+    }
+
+    .btn-outline-theme:hover {
+        background-color: transparent;
+        color: #003789;
+        border: 1px solid #003789;
+    }
+
+    .border-theme {
+        border-color: #003a70 !important;
+    }
+
+    .border-theme:hover {
+        border-color: #003789 !important;
+    }
+
+    .label-theme {
+        color: #ec0909;
+    }
+
+    .theme {
+        background-color: #003a70;
+    }
+
+    .text-theme {
+        color: #003a70 !important;
+    }
+
+    .theme-light {
+        background-color: #f2f3ff;
+    }
+
+    .input-field {
+        border: none;
+        width: 80%;
+    }
+
+    .input-field:focus {
+        outline: none;
+    }
+
+    .search-container {
+        border-radius: 5px;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        margin-left: 4px;
+    }
+
+    .search-container-mf {
+        margin-left: 4px;
+        width: 130px;
+        border-radius: 5px;
+        background-color: white;
+        justify-content: space-evenly;
+        display: flex;
+        border: 1px solid #dfe1e5;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    }
+
+    .search-box-doctor {
+        width: 200px;
+        padding: 0px 20px 0px 35px;
+        border: 1px solid #dfe1e5;
+        border-radius: 4px;
+        font-size: 12px;
+        outline: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background: url("https://www.freepnglogos.com/uploads/search-png/search-icon-clip-art-clkerm-vector-clip-art-online-2.png") no-repeat 10px center;
+        background-size: 17px 17px;
+    }
+
+    .search-box-patient {
+        width: 150px;
+        height: 31px;
+        padding: 0px 10px 0px 35px;
+        border: 1px solid #dfe1e5;
+        border-radius: 4px;
+        font-size: 12px;
+        outline: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background: url("https://www.freepnglogos.com/uploads/search-png/search-icon-clip-art-clkerm-vector-clip-art-online-2.png") no-repeat 10px center;
+        background-size: 17px 17px;
+    }
+
+    .search-box-specialization {
+        width: 200px;
+        padding: 0px 20px 0px 45px;
+        border: 1px solid #dfe1e5;
+        border-radius: 4px;
+        font-size: 12px;
+        outline: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background: url("https://www.freepnglogos.com/uploads/search-png/search-icon-clip-art-clkerm-vector-clip-art-online-2.png") no-repeat 10px center;
+        background-size: 12px 19px;
+    }
+
+    .horizontal-calendar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-calendar {
+        display: block;
+        border: 1px solid white;
+        border-radius: 7px;
+        background-color: #6ecbc9;
+        padding: 0px 10px;
+        min-width: 60px;
+        text-align: center;
+    }
+
+    .btn-calendar-clicked:checked+.btn-calendar {
+        display: block;
+        color: white;
+        border: 1px solid white;
+        border-radius: 10px;
+        background-color: #003a70;
+        padding: 0px 10px;
+        text-align: center;
+        min-width: 60px;
+    }
+
+    .btn-calendar:hover {
+        border: 1px solid white;
+        border-radius: 10px;
+        background-color: #44bae5;
+        padding: 0px 10px;
+        text-align: center;
+    }
+
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        background-color: #F5F5F5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: #FFF;
+        background-image: -webkit-linear-gradient(top,
+                #003a70 0%,
+                #6ecbc9 50%,
+                #6ecbc9 51%,
+                #003a70 100%);
+    }
+
+    .horizontal-calendar::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        border-radius: 10px;
+    }
+
+    .horizontal-calendar::-webkit-scrollbar {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        border-radius: 10px;
+    }
+
+    .horizontal-calendar::-webkit-scrollbar-thumb {
+        border-radius: 10px !important;
+        background-color: #FFF !important;
+        background-image: -webkit-linear-gradient(left, #003a70 0%, #6ecbc9 50%, #6ecbc9 51%, #003a70 100%) !important;
+    }
+</style>
+{% include 'base_menu_2.html' %}
+<div class="container-fluid mt-2" style="font-size: 13px;">
+    <div class="row g-2">
+        <div class="col-lg-2">
+            <div class="card shadow " id="cl2">
+                <div class="card-body border border-danger rounded-2">
+                    <div class=" text-center ">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin"
+                                class="rounded-circle" width="80" />
+                            <div class="mt-3">
+                                <h5>{{ request.user.first_name }} {{ request.user.last_name }}</h5>
+                                <p class="text-secondary mb-1">{{ request.user.profession.name }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card  border border-danger rounded-2 shadow mt-2 overflow-y-auto">
+                <div class="card-header py-0 m-0 g-0 text-center" style="background-color: #6ecbc9">
+                    <span class="rounded-2 my-1 d-inline-flex bg-white">
+                        <input type="text" class="search-box-patient" id="searchPatient" placeholder="Search a Patient">
+                    </span>
+                </div>
+                <div class="card-body px-0">
+                    <div class="text-center overflow-y-auto" style="height:170px;" id="patientList">
+                        <div class="text-center ">
+                            <table class="table table-responsive ">
+                                <tbody>
+                                    {% for p in patient %}
+                                    <tr>
+                                        <td>
+                                            <form action="{% url 'book_appointment_for' record_id=p.RecordIDPK %}"
+                                                id="patientList_{{ p.RecordIDPK }}" method="get">
+                                                {% csrf_token %}
+                                                <span class="btn btn-outline-light btn-sm">
+                                                    <input type="radio" name="selectPatient"
+                                                        onclick="submitPatient('{{ p.RecordIDPK }}')" {% if
+                                                        p.RecordIDPK==selected_patient.RecordIDPK %} checked {% endif
+                                                        %}>
+                                                </span>
+                                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                                                    class="img-fluid md rounded-circle img-thumbnail" width="40px"
+                                                    alt="Patient 1">
+                                                {{ p.FirstName }} {{ p.MiddleName }} {{ p.LastName }}
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-10">
+            <div class="card shadow p-0 g-0 m-0" id="cl10">
+                <div class="card-header">
+                    <h5 class="m-0 text-theme"><i class="bi bi-calendar-check mx-3"></i>Book
+                        Appointment</h5>
+                </div>
+                <div class="card-body border border-danger py-0 m-0 g-0 rounded-2 rounded-top-0  overflow-y-auto">
+                    <div class="row justify-content-evenly mt-2 my-2">
+                        <div
+                            class="col-lg-1 d-flex align-self-center col-md-2 d-lg-block d-md-block d-xl-block d-xxl-block d-none ">
+                            <img src="https://th.bing.com/th/id/OIP.CZkkcWLJGQ3PkRhBmhR1rQAAAA?pid=ImgDet&rs=1"
+                                alt="Admin" class="rounded-circle" width="70px" />
+                        </div>
+                        <div class="col-lg-10">
+                            <div class="row justify-content-between">
+                                <div class="col-lg-2 col-md-6 col-sm-6 mb-2">
+                                    <label class="card-title p-0 m-0"><span class="text-theme fw-bold">Patient
+                                            Name</span></label>
+                                    <input type="text" id="patientName"
+                                        class="form-control-plaintext p-0 m-0 text-secondary"
+                                        value="{{selected_patient.FirstName}} {{selected_patient.MiddleName}} {{selected_patient.LastName}}"
+                                        readonly>
+                                </div>
+                                <div class="col-lg-2 col-md-6 col-sm-6 mb-2">
+                                    <label class="card-title p-0 m-0"><span class="text-theme fw-bold">Contact
+                                            Number</span></label>
+                                    <input type="text" id="contactNumber"
+                                        class="form-control-plaintext p-0 m-0 text-secondary"
+                                        value="{{ selected_patient_phone.PatientContactNumber }}" readonly>
+                                </div>
+                                <div class="col-lg-2 col-md-6 col-sm-6 mb-2">
+                                    <label class="card-title p-0 m-0"><span class="text-theme fw-bold">Patient
+                                            id</span></label>
+                                    <input type="text" id="patientId"
+                                        class="form-control-plaintext p-0 m-0 text-secondary"
+                                        value="{{selected_patient.PatientID}}" readonly>
+                                </div>
+                                <div class="col-lg-2 col-md-6 col-sm-6 mb-2">
+                                    <label class="card-title p-0 m-0"><span
+                                            class="text-theme fw-bold">Gender</span></label>
+                                    <input type="text" id="gender" class="form-control-plaintext p-0 m-0 text-secondary"
+                                        value="{{selected_patient.Gender}}" readonly>
+                                </div>
+                            </div>
+                            <div class="row mt-2 justify-content-between pb-3">
+                                <div class="col-mb-4 col-lg-2">
+                                    <div class="mb-1">
+                                        <label for="bookingType" class="form-label fw-bold text-theme p-0 m-0">Booking
+                                            Type</label>
+                                        <select class="form-select form-select-sm" style="font-size: 13px;"
+                                            id="bookingType">
+                                            <option value="Online">Online</option>
+                                            <option value="Walk-in">Walk-in</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-mb-4 col-lg-2">
+                                    <div class="mb-1">
+                                        <label for="appointmentType"
+                                            class="form-label fw-bold text-theme p-0 m-0">Appointment Type</label>
+                                        <select class="form-select form-select-sm" style="font-size: 13px;"
+                                            id="appointmentType">
+                                            <option value="New">New</option>
+                                            <option value="Followup">Followup</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-mb-4 col-lg-2">
+                                    <div class="mb-1">
+                                        <label for="appointmentDoneBy"
+                                            class="form-label fw-bold text-theme p-0 m-0">Appointment By</label>
+                                        <select class="form-select form-select-sm" style="font-size: 13px;"
+                                            id="appointmentDoneBy">
+                                            <option value="Self">Self</option>
+                                            <option value="Relative">Relative</option>
+                                            <option value="Friend">Friend</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-mb-4 col-lg-2">
+                                    <div class="mb-1">
+                                        <label for="centerType" class="form-label fw-bold text-theme p-0 m-0">Center
+                                            Type</label>
+                                        <select class="form-select inputs form-select-sm" id="clinicCentreType"
+                                            required>
+                                            {% for csubtyp in clinicCentreSubType %}
+                                            <option value="{{csubtyp.FlagValue}}">{{csubtyp.FlagValue}}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-2 ">
+                <div class="col-lg-7">
+                    <div class="card mt-2 border border-danger rounded-2 shadow ">
+                        <div class="card-header m-0 p-0 g-0" style="background-color:#6ecbc9">
+                            <div class="row justify-content-evenly">
+                                <span class="col-lg-4 col-md-4 col-sm-4 form-control-sm d-inline-flex">
+                                    <span class="search-container">
+                                        <input type="text" class="search-box-doctor" id="search-Doc"
+                                            placeholder="Search Doctor or Speciality">
+                                    </span>
+                                </span>
+                                <!-- <span class="col-lg-4 col-md-4 col-sm-4 form-control-sm d-inline-flex">
+                                    <span class="search-container">
+                                        <input type="text" class="search-box-specialization" id="search-Fac"
+                                            placeholder="Search Facility">
+                                    </span>
+                                </span> -->
+                                <span class="col-lg-3 col-md-3 col-sm-3 form-control-sm d-inline-flex">
+                                    <span class="search-container-mf">
+                                        <span class="px-2">
+                                            <label class="fs-5" title="Male doctors only" for="genderPreferenceM">
+                                                <i class="fa-sharp fa-solid fa-person"></i>
+                                            </label>
+                                            <input class="" type="radio" value="Male" name="genderPreference"
+                                                id="genderPreferenceM">
+                                        </span>
+                                        <span class="px-2">
+                                            <label class="fs-5" title="Female doctors only" for="genderPreferenceF">
+                                                <i class="fa-sharp fa-solid fa-person-dress"></i>
+                                            </label>
+                                            <input class="" type="radio" value="Female" name="genderPreference"
+                                                id="genderPreferenceF">
+                                        </span>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body align-items-center ">
+                            <div class="overflow-y-auto" style="height:170px;">
+                                <table
+                                    class="table border border-2 border-secondary-subtle rounded-2 table-responsive ">
+                                    <tbody>
+                                        {% if obj%}
+                                        {% for d in obj%}
+                                        <tr class="docDetail">
+                                            <td>
+                                                <span class="btn btn-outline-light btn-sm"> <input type="radio"
+                                                        name="selectDoctor" value="{{d.MstHealthProfessionalIDPK}}"
+                                                        id="selectedDoctor"></span>
+                                                <img src="/media/{{d.ProfessionalProfilePic}}" alt="" width="40"
+                                                    height="40" class="rounded-circle">
+                                            </td>
+                                            <td>
+                                                <span class="fw-bold selectDoctor"
+                                                    id="doctorName{{d.MstHealthProfessionalIDPK}}">{{d.FirstName}}&nbsp;{{d.LastName}}</span>
+                                                <br>
+                                                <span class="specialization">{{d.Designation}}</span>
+                                                <span class="fw-light">
+                                                    {{d.healthprofessionalexperiencedetails__ExperienceYears}}+year</span>
+                                                <span class="d-none">{{d.Gender}}</span>
+                                            </td>
+                                            <td>
+
+                                                <button type="button" class="btn btn-theme btn-sm" id="viewProfileBtn"
+                                                    onclick="viewDoctorProfile({{ d.MstHealthProfessionalIDPK }})">View
+                                                    Profile</button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        {%else%}
+                                        <div class="alert alert-danger " role="alert">
+                                            <div class="text-danger ms-5"><i
+                                                    class="fa-solid fa-triangle-exclamation fa-lg"
+                                                    style="color: #ff0000;"></i> No Doctor Available</div>
+                                        </div>
+
+                                        {%endif%}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card shadow mt-2 border border-danger rounded-2 ">
+                        <div id="calendar"></div>
+                        <div class="overflow-y-auto" style="height:192px;">
+                            <div class="text-center">
+                                <label for="slotDate" class="text-theme fw-semibold my-1">Available Slots</label>
+                            </div>
+                            <div id="slots" class=" overflow-x-hidden"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="doctorProfileModal" tabindex="-1" role="dialog" aria-labelledby="doctorProfileModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="doctorProfileModalLabel">Doctor Details</h5>
+            </div>
+            <div class="modal-body">
+                <div id="doctorDetailsContainer" class="px-5">
+                    <!-- Doctor details will be dynamically inserted here via JavaScript -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal modal-lg fade" id="bookModal" tabindex="-1" role="dialog" aria-labelledby="bookModalLabel"
+    aria-hidden="true" style="font-size: 13px;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <b class="modal-title" id="bookModalLabel">Booking Details</b>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <form action="{% url 'book-appointment' %}" method="post" class="needs-validation">
+                        {% csrf_token %}
+                        <div class="row justify-content-between">
+                            <div class="col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <label class="card-title p-0 m-0"><span class="text-theme fw-bold">Patient
+                                        Name</span></label>
+                                <input type="text" name="patientName"
+                                    class="form-control-plaintext p-0 m-0 text-secondary"
+                                    value="{{selected_patient.FirstName}} {{selected_patient.LastName}}" readonly>
+                            </div>
+
+                            <div class="col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <label class="card-title p-0 m-0"><span class="text-theme fw-bold">Patient
+                                        Id</span></label>
+                                <input type="text" name="patientId"
+                                    class="form-control-plaintext p-0 m-0 text-secondary"
+                                    value="{{selected_patient.PatientID}}" readonly>
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <label class="card-title p-0 m-0"><span class="text-theme fw-bold">Booking
+                                        Type</span></label>
+                                <input type="text" name="bookingType"
+                                    class="form-control-plaintext p-0 m-0 text-secondary" value="" readonly>
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <label class="card-title p-0 m-0"><span class="text-theme fw-bold">Appointment
+                                        Type</span></label>
+                                <input type="text" name="appointmentType"
+                                    class="form-control-plaintext p-0 m-0 text-secondary" value="" readonly>
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <label class="card-title p-0 m-0"><span class="text-theme fw-bold">Appointment
+                                        By</span></label>
+                                <input type="text" name="appointmentDoneBy"
+                                    class="form-control-plaintext p-0 m-0 text-secondary" value="" readonly>
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <label class="card-title p-0 m-0"><span class="text-theme fw-bold">Center
+                                        Type</span></label>
+                                <input type="text" name="clinicCentreType"
+                                    class="form-control-plaintext p-0 m-0 text-secondary" value="" readonly required>
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <label class="card-title p-0 m-0"><span class="text-theme fw-bold">Doctor
+                                        Name</span></label>
+                                <input type="text" name="docName" class="form-control-plaintext p-0 m-0 text-secondary"
+                                    value="" readonly>
+                                <input type="hidden" name="docId" value="" readonly>
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <label class="card-title p-0 m-0"><span class="text-theme fw-bold">Appointment
+                                        Date</span></label>
+                                <input type="text" name="appointmentDate"
+                                    class="form-control-plaintext p-0 m-0 text-secondary" value="" readonly>
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <label class="card-title p-0 m-0"><span class="text-theme fw-bold">Appointment
+                                        Time</span></label>
+                                <input type="text" name="slotTime" class="form-control-plaintext p-0 m-0 text-secondary"
+                                    value="" readonly>
+                                <input type="hidden" name="slotId" value="" readonly>
+                            </div>
+                        </div>
+                        <div class="row justify-content-end">
+                            <button type="submit" class="col-3 btn btn-theme mx-3">Book Appointment</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+
+    function viewDoctorProfile(doctorId) {
+
+        $.ajax({
+            url: '/Patient/select_doctor/' + doctorId + '/',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                updateDoctorModal(data);
+                $('#doctorProfileModal').modal('show');
+            },
+            error: function (error) {
+                console.error('Error fetching doctor details:', error);
+            }
+        });
+    }
+    
+    function updateDoctorModal(doctor) {
+    $('#doctorDetailsContainer').empty();
+
+    if (doctor) {
+        var container = $('#doctorDetailsContainer');
+
+        // Basic details
+        container.append('<div class="row"><div class="col-md-4"><strong>Name:</strong></div><div class="col-md-8">' + (doctor.name || '') + '</div></div>');
+        container.append('<div class="row"><div class="col-md-4"><strong>National Registration Number:</strong></div><div class="col-md-8">' + (doctor.registrationNumber || '') + '</div></div>');
+        
+        // Check if State Registration Number is available before appending
+        if (doctor.stateRegistrationNumber) {
+            container.append('<div class="row"><div class="col-md-4"><strong>State Registration Number:</strong></div><div class="col-md-8">' + doctor.stateRegistrationNumber + '</div></div>');
+        }
+
+        container.append('<div class="row"><div class="col-md-4"><strong>Email:</strong></div><div class="col-md-8">' + (doctor.email || '') + '</div></div>');
+        container.append('<div class="row"><div class="col-md-12"><hr></div></div>');
+
+        // Education details
+        if (doctor.education && doctor.education.length > 0) {
+            container.append('<div class="row"><div class="col-md-12"><h5>Education:</h5></div></div>');
+
+            for (var i = 0; i < doctor.education.length; i++) {
+                var education = doctor.education[i];
+
+                container.append('<div class="row"><div class="col-md-4"><strong>Qualification Type:</strong></div><div class="col-md-8">' + (education.qualificationType || '') + '</div></div>');
+                container.append('<div class="row"><div class="col-md-4"><strong>Qualification Name:</strong></div><div class="col-md-8">' + (education.qualificationName || '') + '</div></div>');
+                container.append('<div class="row"><div class="col-md-4"><strong>Current Status:</strong></div><div class="col-md-8">' + (education.currentStatus || '') + '</div></div>');
+                container.append('<div class="row"><div class="col-md-4"><strong>Passing Year:</strong></div><div class="col-md-8">' + (education.passingYear || '') + '</div></div>');
+                container.append('<div class="row"><div class="col-md-12"><hr></div></div>');
+            }
+        }
+
+        // Experience details
+        if (doctor.experiences && doctor.experiences.length > 0) {
+            container.append('<div class="row"><div class="col-md-12"><h5>Experience:</h5></div></div>');
+            for (var i = 0; i < doctor.experiences.length; i++) {
+                var experience = doctor.experiences[i];
+
+                container.append('<div class="row"><div class="col-md-4"><strong>Medical Institute:</strong></div><div class="col-md-8">' + (experience.MedicalInstitute || '') + '</div></div>');
+                container.append('<div class="row"><div class="col-md-4"><strong>Experience Years:</strong></div><div class="col-md-8">' + (experience.ExperienceYears || '') + '</div></div>');
+                container.append('<div class="row"><div class="col-md-4"><strong>Job Description:</strong></div><div class="col-md-8">' + (experience.JobDescription || '') + '</div></div>');
+                container.append('<div class="row"><div class="col-md-4"><strong>Start Date:</strong></div><div class="col-md-8">' + (experience.StartDate || '') + '</div></div>');
+                container.append('<div class="row"><div class="col-md-4"><strong>End Date:</strong></div><div class="col-md-8">' + (experience.EndDate || '') + '</div></div>');
+                container.append('<div class="row"><div class="col-md-12"><hr></div></div>');
+            }
+        }
+
+        // Certification details
+        if (doctor.certifications && doctor.certifications.length > 0) {
+            container.append('<div class="row"><div class="col-md-12"><h5>Certifications:</h5></div></div>');
+            for (var j = 0; j < doctor.certifications.length; j++) {
+                var certification = doctor.certifications[j];
+
+                container.append('<div class="row"><div class="col-md-4"><strong>Certificate Name:</strong></div><div class="col-md-8">' + (certification.certificateName || '') + '</div></div>');
+                container.append('<div class="row"><div class="col-md-4"><strong>Issue Date:</strong></div><div class="col-md-8">' + (certification.issueDate || '') + '</div></div>');
+                container.append('<div class="row"><div class="col-md-4"><strong>Expiry Date:</strong></div><div class="col-md-8">' + (certification.expiryDate || '') + '</div></div>');
+                container.append('<div class="row"><div class="col-md-12"><hr></div></div>');
+            }
+        }
+    } else {
+        console.error('Invalid data received from the server:', doctor);
+    }
+}
+
+</script>
+
+
+<script>
+    function submitPatient(recordID) {
+        var patientForm = document.getElementById('patientList_' + recordID);
+        if (patientForm) {
+            patientForm.submit();
+        } else {
+            console.error('Form with id "patientList_' + recordID + '" not found');
+        }
+    }
+
+
+    $(document).ready(function () {
+        // Function to perform filtering based on input text
+        function filterDoctors() {
+            const searchDoctor = $("#search-Doc").val().toLowerCase();
+            const genderPreference = $("input[name='genderPreference']:checked").val();
+            $("tr.docDetail").each(function () {
+                const doctorName = $(this).find("span.selectDoctor").text().toLowerCase();
+                const specialization = $(this).find("span.specialization").text().toLowerCase();
+                const gender = $(this).find("span.d-none").text().toLowerCase();
+
+                const doctorMatch = doctorName.includes(searchDoctor);
+                const specializationMatch = specialization.includes(searchDoctor);
+                const genderMatch = !genderPreference || gender === genderPreference.toLowerCase();
+                if (doctorMatch || specializationMatch && genderMatch) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+        // Attach input event handlers to the search boxes and radio buttons
+        $("#search-Doc, input[name='genderPreference']").on("input", filterDoctors);
+    });
+
+</script>
+
+
+<script>
+    const cl2Height = document.getElementById("cl2").offsetHeight;
+    const cl10Height = document.getElementById("cl10").offsetHeight;
+
+
+    // Set the height of both columns to the maximum height
+    const maxHeight = Math.max(cl2Height, cl10Height);
+    document.getElementById("cl2").style.height = maxHeight + "px";
+    document.getElementById("cl10").style.height = maxHeight + "px";
+    var sDate;
+    var selectedValue;
+    var selected_doc;
+
+    function updateCalendar() {
+        // Get the current date
+        var currentDate = new Date();
+
+        // Create an array of day names
+        var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        // Create a variable to hold the HTML for the calendar
+        var calendarHTML = '<div class="horizontal-calendar overflow-x-auto btn-group" role="group" aria-label="Basic radio toggle button group">';
+
+        // Loop through the next 28 days
+        for (var i = 0; i < 28; i++) {
+            // Add the day name and date to the calendar
+            var dayName = dayNames[currentDate.getDay()];
+            var date = currentDate.getDate();
+
+            var day = currentDate.getDate();
+            var month = currentDate.getMonth() + 1; // Adding 1 to get the correct month
+            var year = currentDate.getFullYear();
+
+            // Ensure that day and month have two digits
+            day = day < 10 ? '0' + day : day;
+            month = month < 10 ? '0' + month : month;
+
+            var selDate = year + '-' + day + '-' + month;
+
+            // Create a unique ID for each radio button
+            var radioButtonId = dayName + '_' + date;
+
+            calendarHTML += `<input type="radio" class="d-none btn-calendar-clicked p-0 m-0 g-0" autocomplete="off" name="btnSlot" id="${radioButtonId}" autocomplete="off" >
+                <label class="btn-calendar mybtn "  id="selectedDate" onclick="openSlot('${selDate}')" for="${radioButtonId}">${dayName}<br>${date}</label>`;
+
+            // Increment the date by one day
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+
+        // Close the calendar HTML
+        calendarHTML += '</div>';
+
+        // Add the calendar HTML to the "calendar" div
+        document.getElementById('calendar').innerHTML = calendarHTML;
+    }
+
+    // Call the function to initially populate the calendar
+    updateCalendar();
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = $.trim(cookies[i]);
+                // Check if this cookie string begins with the name we want
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function openSlot(selectedDate) {
+        const slotsContent = $("#slots");
+        slotsContent.empty();
+        selectedDate = selectedDate.toString();
+        sDate = selectedDate;
+        const selectedDoctor = document.getElementsByName("selectDoctor");
+
+
+        for (var i = 0; i < selectedDoctor.length; i++) {
+            if (selectedDoctor[i].checked) {
+                selectedValue = selectedDoctor[i].value;
+                break;
+            }
+        }
+
+
+
+        // Assuming you have a server endpoint for handling the AJAX request
+        const url = '/Patient/book_appointment/' + selectedValue + '/' + selectedDate + '/';
+
+        // Data to be sent in the request
+        const data = {
+            selectedDate: selectedDate,
+            selectedDoctor: selectedDoctor
+        };
+
+        // Get the CSRF token from the cookie
+        const csrftoken = getCookie('csrftoken');
+
+        // Making the AJAX request using jQuery
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            success: function (slots) {
+                // Assuming the server responds with the available slots in JSON format
+                if (slots[0] != null) {
+                    slotsContent.html(generateSlotsHTML(slots));
+                }
+                else {
+                    slotsContent.html('<div class="p-4"><div class="alert alert-danger text-center" role="alert">' +
+                        '<div class="text-danger">' + '<i class="fa-solid fa-triangle-exclamation fa-lg" style="color: #ff0000;"></i>   No slot available for ' + selectedDate + '. </div></div></div>');
+                }
+            },
+            error: function (error) {
+                console.error('Error:', error);
+                slotsContent.html('<div class="p-4"><div class="alert alert-danger text-center" role="alert">' +
+                    '<div class="text-danger">' + '<i class="fa-solid fa-triangle-exclamation fa-lg" style="color: #ff0000;"></i>   Failed to fetch slots for ' + selectedDate + '. </div></div></div>');
+            }
+        });
+    }
+
+    // Updated js function to show slots
+    function generateSlotsHTML(slots) {
+        const slotHTML = slots.map(slot => {
+            const slotId = slot['SlotId'];
+            const startTime = formatTime(slot['StartTime']);
+            const endTime = formatTime(slot['EndTime']);
+            const status = slot['Status'];
+
+            // Determine the button class based on the Status
+            const buttonClass = status === 'Available' ? 'btn btn-success btn-sm' : 'btn btn-outline-secondary btn-sm disabled';
+
+            // Determine if the button should be disabled
+            const onClicked = status === 'Available';
+
+            // Create the HTML for the slot
+            return `<div class="col-3 text-center" >
+            <div style="font-size:13px" class="btn ${buttonClass}" ${onClicked ? "onclick='bookSlot(" + String(slotId) + ",\"" + String(startTime) + " - " + String(endTime) + "\")'" : ""}>${startTime}- <br> ${endTime}</div>
+        </div>`;
+
+
+        }).join('');
+
+        return `<div class="row g-3 px-2 justify-content-start">${slotHTML}</div>`;
+    }
+
+    // Helper function to format time to 'HH:mm AM/PM'
+    function formatTime(time) {
+        const [hours, minutes] = time.split(':');
+        const formattedHours = parseInt(hours) % 12 || 12;
+        const ampm = parseInt(hours) >= 12 ? 'PM' : 'AM';
+        return `${formattedHours}:${minutes} ${ampm}`;
+    }
+
+    function bookSlot(slotId, slotTime) {
+        // Set values for form elements
+        document.getElementsByName('bookingType')[0].value = document.getElementById('bookingType').value;
+        document.getElementsByName('appointmentType')[0].value = document.getElementById('appointmentType').value;
+        document.getElementsByName('appointmentDoneBy')[0].value = document.getElementById('appointmentDoneBy').value;
+        document.getElementsByName('clinicCentreType')[0].value = document.getElementById('clinicCentreType').value;
+        document.getElementsByName('docId')[0].value = selectedValue;
+        document.getElementsByName('docName')[0].value = document.getElementById("doctorName" + selectedValue).innerText;
+        document.getElementsByName('appointmentDate')[0].value = sDate;
+        document.getElementsByName('slotTime')[0].value = slotTime;
+        document.getElementsByName('slotId')[0].value = slotId;
+
+
+
+        // Open the Bootstrap modal
+        var myModal = new bootstrap.Modal(document.getElementById('bookModal'));
+        myModal.show();
+    }
+
+
+</script>
+
+{% endblock content %}
