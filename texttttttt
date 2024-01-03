@@ -1,0 +1,77 @@
+@require_POST
+def vitals_modal_insert(request):
+    response_data = {'success': False, 'message': 'An error occurred.'}
+
+    if request.method == 'POST':
+        mutable_post = request.POST.copy()
+        
+        for key in mutable_post:
+            value = mutable_post.get(key)
+            print(key, value)
+        
+            if value == '':
+                mutable_post[key] = None
+                print(key, mutable_post.get(key))
+ 
+# Now you can use 'mutable_post' in your processing
+        try:
+            # Accessing the form data from the request
+            vitals_id =mutable_post.get('vitals_id')
+            appointment_id =mutable_post.get('appointment_id')
+            height =mutable_post.get('height')
+            weight =mutable_post.get('weight')
+            systolic =mutable_post.get('systolic')
+            diastolic =mutable_post.get('diastolic')
+            temperature =mutable_post.get('temperature')
+            pulse =mutable_post.get('pulse')
+            respiratory_rate =mutable_post.get('respiratory_rate')
+            random_blood_sugar =mutable_post.get('random_blood_sugar')
+            spo2 =mutable_post.get('spo2')
+            level_of_consciousness =mutable_post.get('level_of_consciousness')
+            pupillary_response =mutable_post.get('pupillary_response')
+
+            # Try to get the Vitals object for the given appointment_id
+            vitals, created = Vitals.objects.get_or_create(
+                vitals_id=vitals_id,
+                appointment=Appointment.objects.get(AppointmentIDPK=appointment_id),
+                defaults={
+                    'height': height,
+                    'weight': weight,
+                    'systolic': systolic,
+                    'diastolic': diastolic,
+                    'temperature': temperature,
+                    'pulse': pulse,
+                    'respiratory_rate': respiratory_rate,
+                    'random_blood_sugar': random_blood_sugar,
+                    'spo2': spo2,
+                    'level_of_consciousness': level_of_consciousness,
+                    'pupillary_response': pupillary_response
+                }
+            )
+
+            # If the object was not created, it means it already existed, so update it
+            if not created:
+                vitals.height = height
+                vitals.weight = weight
+                vitals.systolic = systolic
+                vitals.diastolic = diastolic
+                vitals.temperature = temperature
+                vitals.pulse = pulse
+                vitals.respiratory_rate = respiratory_rate
+                vitals.random_blood_sugar = random_blood_sugar
+                vitals.spo2 = spo2
+                vitals.level_of_consciousness = level_of_consciousness
+                vitals.pupillary_response = pupillary_response
+                vitals.save()
+
+            # Set success message
+            response_data['success'] = True
+            response_data['message'] = 'Vitals recorded successfully.'
+        except Appointment.DoesNotExist:
+            response_data['message'] = 'Appointment not found.'
+        except Exception as e:
+            
+            # Log the exception for debugging purposes
+            print(f"Error saving vitals: {e}")
+
+    return JsonResponse(response_data)
