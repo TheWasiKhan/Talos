@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Pre-Examination List{% endblock %}
+
+{% block body %}
+
+{% load static %}
+{% include 'base_menu_2.html' %}
+
+{% if doc_con_list %}
+<div class="p-2 vh-100">
+    <h4 class="text-center">Booked Appointments</h4>
+        <table class="border table table-responsive table-hover w-100" id="tbl">
+            <thead>
+            <tr class="fw-bold">
+                <td class="border">#</td>
+                <td class="border">Patient Name</td>
+                <td class="border">Slot Date</td>
+                <td class="border">Slot Time</td>
+                <td class="border">Status</td>
+                <td class="border">Action</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for x in doc_con_list %}
+            <tr>
+                <td class="border">
+                    {{ forloop.counter }}.
+                </td>
+                <td class="border">{{ x.PatientIDFK.FirstName }}</td>
+                <td class="border">{{ x.SlotIDFK.SlotDate}}</td>
+                <td class="border">{{ x.SlotIDFK.StartTime}}</td>
+                <td class="border">{{ x.SlotIDFK.Status}}</td>
+                <td class="border">
+                    <a class="btn btn-sm btn-animate-2 backgroundneela" href="/Clinic/Pre-Examination/{{ x.AppointmentIDPK }}/" >Pre-Examine</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+</div>
+{% else %}
+<div class="text-center mt-4">
+    <label class="p-2 bg-warning">No Appointment Booked</label>
+</div>
+{% endif %}
+<script>
+    new DataTable('#tbl');
+</script>
+
+
+
+
+
+{% endblock %}

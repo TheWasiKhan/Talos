@@ -1,0 +1,1281 @@
+{% extends 'base.html' %}
+{% block title %}Medical History{% endblock %}
+{% block body %}
+{% load static %}
+{% load i18n %}
+<style>
+    .navbar a {
+        color: white;
+    }
+
+    .navbar-nav a {
+        color: white;
+    }
+
+    .btn-gr {
+        background: linear-gradient(45deg, #003a70, #ec0909);
+    }
+
+    .btn-gr:hover {
+        background: linear-gradient(45deg, #003a70, #6ecbc9);
+    }
+
+    .btn-grr {
+        background: linear-gradient(45deg, #6ecbc9, #003a70);
+    }
+
+    .btn-grr:hover {
+        background: linear-gradient(45deg, #ec0909, #003a70);
+    }
+
+    .btn-theme {
+        background-color: #003a70;
+        color: white;
+    }
+
+    .btn-theme:hover {
+        background-color: #003789 !important;
+        color: white !important;
+    }
+
+    .btn-outline-theme {
+        background-color: transparent;
+        border: 1px solid #003a70;
+        color: #003a70;
+    }
+
+    .btn-outline-theme:hover {
+        background-color: transparent;
+        color: #003789;
+        border: 1px solid #003789;
+    }
+
+    .head-green {
+        background-color: #6ecbc9;
+    }
+
+    .border-theme {
+        border-color: #003a70 !important;
+    }
+
+    .border-theme:hover {
+        border-color: #003789 !important;
+    }
+
+    .label-theme {
+        color: #ec0909;
+    }
+
+    .theme {
+        background-color: #003a70;
+    }
+
+    .text-theme {
+        color: #003a70 !important;
+    }
+
+    .theme-light {
+        background-color: #f2f3ff;
+    }
+
+
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        background-color: #F5F5F5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: #FFF;
+        background-image: -webkit-linear-gradient(top,
+                #003a70 0%,
+                #6ecbc9 50%,
+                #6ecbc9 51%,
+                #003a70 100%);
+    }
+
+    .nav-tabs .nav-item .nav-link.active {
+        background: linear-gradient(to bottom, white 95%, white 5%);
+        color: #6ecbc9;
+        border-top: solid red 1px;
+        border-left: solid red 1px;
+        border-right: solid red 1px;
+        border-bottom: solid white 2px;
+
+    }
+
+    .nav-tabs .nav-item .nav-link {
+        background: linear-gradient(to bottom, #6ecbc9 95%, #F9F9F9 5%);
+        border-bottom: solid #F9F9F9 1px;
+        color: white;
+    }
+
+    .nav-tabs {
+        border-bottom: solid red 1px;
+        ;
+    }
+
+    .nav-tabs .nav-item .nav-link {
+        background: linear-gradient(to bottom, #6ecbc9 95%, #F9F9F9 5%);
+        border-bottom: solid #F9F9F9 1px;
+        color: white;
+    }
+</style>
+{% include 'base_menu_2.html' %}
+
+<div class="container-fluid mt-2" style="font-size: 14px;">
+    <form action="" class="needs-validation" method="post">
+        {%csrf_token%}
+        <div class="card">
+            <div class="card-header sticky-top bg-white">
+                <span class="text-theme fs-5 fw-bold">&nbsp;<i class="bi bi-person-lines-fill"></i>&nbsp;&nbsp;</span>
+                <span class="text-theme fs-5 fw-bold">Pre-Examination</span>
+                <span class="text-danger fs-5 fw-bold"> - Medical History</span>
+            </div>
+            <div class="card-body">
+                <div class="head-green fw-semibold fs-5 p-2 rounded">Patient History</div>
+                <div id="chief_complain">
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Chief Complaint History
+                        </div>
+                        <div class="card-body ">
+                            <div class="clone-container">
+                                <div class="chief_complaint_history attr-row">
+                                    <div class="row justify-content-between">
+                                        <div class="col-sm-4 mb-sm-0 mb-3">
+                                            <label class="fw-normal">Problem</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                placeholder="Problem" name="problem" id="problem" value="">
+                                        </div>
+                                        <div class="col mb-3">
+                                            <div class="d-flex py-3 ">
+                                                <div class="ms-auto">
+                                                    <button type="button" id="addChief" class="btn btn-sm btn-theme"><i
+                                                            class="bi bi-plus"></i>
+                                                        Add More</button>
+                                                </div>
+                                                <div class="ms-2">
+                                                    <button type="button" id="removeChief"
+                                                        class="btn btn-sm btn-danger"><i class="bi bi-trash"></i>
+                                                        Remove
+                                                        Last</button>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Onset</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                placeholder="Onset" name="onset" id="onset" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Site</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                placeholder="Site" name="site" id="site" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Progression</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                placeholder="Progression" name="progression" id="progression"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Duration</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                placeholder="Duration" name="duration" id="duration" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Frequency</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                placeholder="Frequency" name="frequency" id="frequency" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Color</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                placeholder="Color" name="color" id="color" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Grade</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                placeholder="Grade" name="grade" id="grade" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Radiating To</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                placeholder="Radiating To" name="radiating_to" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Relieving Factor</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                placeholder="Relieving factor" name="relieving_factor"
+                                                id="relieving_factor" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Aggravating Factor</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                placeholder="Aggravating Factor" name="aggravating_factor"
+                                                id="aggravating_factor" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Smell</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                placeholder="Smell" name="smell" id="smell" value="">
+                                        </div>
+                                    </div>
+
+                                    <!-- Add More Chief Complaint History -->
+                                    <div id="more-Chief"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="past_history">
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Past History
+                        </div>
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-4"></div>
+                                <div class="col">
+                                    <div class="d-flex">
+                                        <div class="ms-auto">
+                                            <button type="button" id="addPast" class="btn btn-sm btn-theme"><i
+                                                    class="bi bi-plus"></i>
+                                                Add
+                                                More</button>
+                                        </div>
+                                        <div class="ms-2">
+                                            <button type="button" id="removePast" class="btn btn-sm btn-danger"><i
+                                                    class="bi bi-trash"></i>
+                                                Remove
+                                                Last</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="clone-container">
+                                <div class="past_medical_history attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-6">
+                                            <label class="fw-normal">Past
+                                                Disease</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="past_disease" id="past_disease" placeholder="Past Disease"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="fw-normal">Disease
+                                                Details</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="disease_details" id="disease_details"
+                                                placeholder="Disease Details" value="">
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <!-- Add More Past Medical History -->
+                                <div id="more-Past">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div id="presoal_history" >
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Personal History
+                        </div>
+                        <div class="card-body no-top-padding">
+                            <div class="clone-container">
+                                <div class="attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Smoking </label>
+                                            <select class="form-control form-control-sm" name="smoking" id="smoking">
+                                                <option value="">- Smoking -</option>
+                                                <option value="No" selected="">No</option>
+                                                <option value="Moderate">Moderate</option>
+                                                <option value="Heavy">Heavy</option>
+                                            </select>
+                                            <span id="smoking_Err"></span>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Alcohol</label>
+                                            <select class="form-control form-control-sm" name="alcohol"
+                                                id="alcalcoholohol">
+                                                <option value="">- Alcohol -</option>
+                                                <option value="No">No</option>
+                                                <option value="Moderate" selected="">Moderate
+                                                </option>
+                                                <option value="Heavy">Heavy</option>
+                                            </select>
+                                            <span id="alcohol_Err"></span>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Sleep</label>
+                                            <select class="form-control form-control-sm" name="sleep" id="sleep">
+                                                <option value="">- Sleep -</option>
+                                                <option value="Poor" selected="">Poor</option>
+                                                <option value="Good">Good</option>
+                                            </select>
+                                            <span id="sleep_Err"></span>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Allergy</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="allergy" id="allergy" placeholder="Allergy" value="">
+                                            <span id="allergy_Err"></span>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Bowel and Bladder
+                                                Habits</label>
+                                            <select class="form-control form-control-sm" name="bowel_bladder_habits"
+                                                id="bowel_bladder_habits">
+                                                <option value="">- Bowel and bladder habits -
+                                                </option>
+                                                <option value="Both Normal">Both Normal
+                                                </option>
+                                                <option value="Both Abnormal">Both Abnormal
+                                                </option>
+                                                <option value="Abnormal Bowel">Abnormal Bowel
+                                                </option>
+                                                <option value="Abnormal Bladder">Abnormal
+                                                    Bladder</option>
+                                            </select>
+                                            <span id="bowel_bladder_habits_Err"></span>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Appetite</label>
+                                            <select class="form-control form-control-sm" name="appetite" id="appetite">
+                                                <option value="">- Appetite -</option>
+                                                <option value="Good">Good</option>
+                                                <option value="Poor">Poor</option>
+                                            </select>
+                                            <span id="appetite_Err"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="family_history" >
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Family History
+                        </div>
+                        <div class="card-body no-top-padding">
+                            <div class="row">
+                                <div class="col-4"></div>
+                                <div class="col">
+                                    <div class="d-flex">
+                                        <div class="ms-auto">
+                                            <button type="button" id="addFamily" class="btn btn-sm btn-theme"><i
+                                                    class="bi bi-plus"></i> Add
+                                                More</button>
+                                        </div>
+                                        <div class="ms-2">
+                                            <button type="button" id="removeFamily" class="btn btn-sm btn-danger"><i
+                                                    class="bi bi-trash"></i>
+                                                Remove Last</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clone-container">
+                                <div class="family_history attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-6">
+                                            <label class="fw-normal">Disease</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="disease" id="disease" placeholder="Disease" value="">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="fw-normal">Disease Details</label>
+                                            <select class="form-control form-control-sm" name="disease_details1"
+                                                id="disease_details1">
+                                                <option value="">Select Relation</option>
+                                                <option value="Father">Father</option>
+                                                <option value="Mother">Mother</option>
+                                                <option value="Grand Father">Grand Father
+                                                </option>
+                                                <option value="Grand Mother">Grand Mother
+                                                </option>
+
+
+                                                <option value="Husband">Husband</option>
+                                                <option value="Wife">Wife</option>
+                                                <option value="Brother">Brother</option>
+                                                <option value="Sister">Sister</option>
+
+
+
+                                                <option value="Son">Son</option>
+                                                <option value="Daughter">Daughter</option>
+                                                <option value="Uncle">Uncle</option>
+                                                <option value="Aunt">Aunt</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- Add More Family History -->
+                                <div id="more-Family"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="head-green fw-semibold fs-5 mt-2 p-2 rounded">Systemic History</div>
+                <div id="cardiovascular" >
+
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Symptoms : Cardiovascular
+                        </div>
+                        <div class="card-body no-top-padding">
+                            <div class="clone-container">
+                                <div class="attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Breathlessness</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="breathlessness1" id="breathlessness1" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Palpitations</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="palpitations" id="palpitations" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Chest Pain</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="chest_pain" id="chest_pain" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Fainting</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="fainting1" id="fainting1" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Ankle Edema</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                 name="ankle_edema" id="ankle_edema" value="">
+                                            <span id="ankle_edema_Err"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="nervous" >
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Symptoms : Nervous system
+                        </div>
+                        <div class="card-body no-top-padding">
+                            <div class="clone-container">
+                                <div class="attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Headache</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="headache" id="headache" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Dizziness</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="dizziness" id="dizziness" value="">
+                                        </div>
+
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Fainting</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="fainting2" id="fainting2" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Tremors</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="tremors" id="tremors" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Seizure</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="seizure" id="seizure" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Tinnitus</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="tinnitus" id="tinnitus" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Deafness</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="deafness" id="deafness" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Vision Loss</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="vision_loss" id="vision_loss" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Memory Loss</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="memory_loss" id="memory_loss" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="musculoskeletal" >
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Symptoms : Musculoskeletal
+                        </div>
+                        <div class="card-body no-top-padding">
+                            <div class="clone-container">
+                                <div class="attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Joint Pain</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="joint_pain" id="joint_pain" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Immobility</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="immobility" id="immobility" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Redness</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="redness" id="redness" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Swelling</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="swelling1" id="swelling1" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="genitourinary" >
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Symptoms : Genitourinary
+                        </div>
+                        <div class="card-body no-top-padding">
+                            <div class="clone-container">
+                                <div class="attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Multiple sexual
+                                                partners</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="multiple_sexual_partners" id="multiple_sexual_partners" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Libido</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="libido" id="libido" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Burning Micturition</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="burning_micturition" id="burning_micturition" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Painful Micturition</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="painful_micturition" id="painful_micturition" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Overactive Bladder</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="overactive_bladder" id="overactive_bladder" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Incontinence</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="incontinence" id="incontinence" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Bloody Urine</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="bloody_urine" id="bloody_urine" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">LMP</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="lmp" id="lmp" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">White Discharge</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="white_discharge" id="white_discharge" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Foul Smelling
+                                                Secretions</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="foul_smelling_secretions" id="foul_smelling_secretions" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Itching</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="itching" id="itching" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Periods Duration</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="periods_duration" id="periods_duration" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Dysmenorrhoea</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="dysmenorrhoea" id="dysmenorrhoea" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Painful Coitus</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="painful_coitus" id="painful_coitus" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="gastrointestinal" >
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Symptoms : Gastrointestinal
+                        </div>
+                        <div class="card-body no-top-padding">
+                            <div class="clone-container">
+                                <div class="attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Heartburn</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="heartburn" id="heartburn" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Acidity</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="acidity" id="acidity" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Nausea</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="nausea" id="nausea" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Vomiting</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="vomiting" id="vomiting" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Pain Abdomen</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="pain_abdomen" id="pain_abdomen" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Indigestion</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="indigestion" id="indigestion" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Change in Stool Color</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="change_stool_color" id="change_stool_color" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="respiratory" >
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Symptoms : Respiratory
+                        </div>
+                        <div class="card-body no-top-padding">
+                            <div class="clone-container">
+                                <div class="attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Cough</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="cough" id="cough" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Blood in Sputum</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="blood_sputum" id="blood_sputum" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Breathlessness</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="breathlessness2" id="breathlessness2" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Painful Breathing</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="painful_breathing" id="painful_breathing" value="">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="endocrine" >
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Symptoms : Cardiovascular
+                        </div>
+                        <div class="card-body no-top-padding">
+                            <div class="clone-container">
+                                <div class="attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Heat Intolerance</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="heat_intolerance" id="heat_intolerance" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Cold Intolerance</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="cold_intolerance" id="cold_intolerance" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Heavy Sweating</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="heavy_sweating" id="heavy_sweating" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Polydipsia</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="polydipsia" id="polydipsia" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Polyuria</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="polyuria" id="polyuria" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="head-green fw-semibold fs-5 mt-2 p-2 rounded">GPE Form</div>
+                <div class="card">
+                    <div class="card-body no-top-padding">
+                        <div class="clone-container">
+                            <div class="attr-row">
+                                <div class="row g-3">
+                                    <div class="col-sm-3">
+                                        <label class="fw-normal">Mental State</label>
+                                        <select class="form-control form-control-sm" name="mental_state"
+                                            id="mental_state">
+                                            <option value="">- Select Mental State -</option>
+                                            <option value="Normal" selected="">Normal</option>
+                                            <option value="Drowsy">Drowsy</option>
+                                        </select>
+                                        <span id="mental_state_Err"></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="fw-normal">Cyanosis</label>
+                                        <select class="form-control form-control-sm" name="cyanosis" id="cyanosis">
+                                            <option value="">- Select cyanosis -</option>
+                                            <option value="Present">Present</option>
+                                            <option value="Absent">Absent</option>
+                                        </select>
+                                        <span id="cyanosis_Err"></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="fw-normal">Clubbing</label>
+                                        <select class="form-control form-control-sm" name="clubbing" id="clubbing">
+                                            <option value="">- Select Clubbing -</option>
+                                            <option value="Present">Present</option>
+                                            <option value="Absent">Absent</option>
+                                        </select>
+                                        <span id="clubbing_Err"></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="fw-normal">Pallor</label>
+                                        <select class="form-control form-control-sm" name="pallor" id="pallor">
+                                            <option value="">- Select Pallor -</option>
+                                            <option value="Mild">Mild</option>
+                                            <option value="Present">Present</option>
+                                            <option value="Absent">Absent</option>
+                                        </select>
+                                        <span id="pallor_Err"></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="fw-normal">Icterus</label>
+                                        <select class="form-control form-control-sm" name="icterus" id="icterus">
+                                            <option value="">- Select Icterus -</option>
+                                            <option value="Mild">Mild</option>
+                                            <option value="Present">Present</option>
+                                            <option value="Absent">Absent</option>
+                                        </select>
+                                        <span id="icterus_Err"></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="fw-normal">Lymphadenopathy</label>
+                                        <input type="text" class="form-control form-control-sm "
+                                            name="lymphadenopathy" id="lymphadenopathy" value="">
+                                        <span id="lymphadenopathy_Err"></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="fw-normal">Edema</label>
+                                        <input type="text" class="form-control form-control-sm "
+                                            name="edema" id="edema" value="">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="fw-normal">Body Built</label>
+                                        <select class="form-control form-control-sm" name="body_built" id="body_built">
+                                            <option value="">- Select Body Built -</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="Obese">Obese</option>
+                                            <option value="Thin">Thin</option>
+                                        </select>
+                                        <span id="body_built_Err"></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="fw-normal">Gait</label>
+                                        <select class="form-control form-control-sm" name="gait" id="gait">
+                                            <option value="">- Select Gait -</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="Abnormal">Abnormal</option>
+                                            <option value="Parkinsonian">Parkinsonian</option>
+                                            <option value="Scissor Gait">Scissor Gait</option>
+                                            <option value="Waddling Gait">Waddling Gait</option>
+                                            <option value="Spastic">Spastic</option>
+                                            <option value="Stoppage">Stoppage</option>
+                                        </select>
+                                        <span id="gait_Err"></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="fw-normal">Height</label>
+                                        <input type="text" class="form-control form-control-sm "
+                                            name="height" id="height" value="">
+                                        <span id="height_Err"></span>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="fw-normal">Weight</label>
+                                        <input type="text" class="form-control form-control-sm "
+                                            name="weight" id="weight" value="">
+                                        <span id="weight_Err"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="head-green fw-semibold fs-5 mt-2 p-2 rounded">Systemic Examination</div>
+                <div id="cardiovascular_system">
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Cardiovascular
+                        </div>
+                        <div class="card-body no-top-padding">
+                            <div class="clone-container">
+                                <div class="attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Pulse</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="pulse2" id="pulse2" placeholder="Pulse" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Heart Sounds</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="heart_sounds" id="heart_sounds" placeholder="Heart Sounds"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">JVP</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="jvp" id="jvp" placeholder="JVP" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Chest Wall
+                                                Abnormalities</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="chest_wall" id="chest_wall" placeholder="Chest Wall Abnormalities"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Engorged Veins</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="engorged_veins" id="engorged_veins" placeholder="Engorged Veins"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Auscultation</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="cardiovascular_auscultation" id="cardiovascular_auscultation"
+                                                placeholder="Auscultation" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="respiratory_system" >
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Respiratory
+                        </div>
+                        <div class="card-body no-top-padding">
+                            <div class="clone-container">
+                                <div class="attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Chest Shape</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="chest_shape" id="chest_shape" placeholder="Chest Shape" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Chest Movement</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="chest_movement" id="chest_movement" placeholder="Chest Movement"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Auscultation</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="auscultation" id="auscultation" placeholder="Auscultation"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Percussion</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="percussion1" id="percussion1" placeholder="Percussion" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Trachea Position</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="trachea_position" id="trachea_position"
+                                                placeholder="Trachea Position" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Vocal Fremitus</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="vocal_fremitus" id="vocal_fremitus" placeholder="vocal fremitus"
+                                                value="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="gastrointestinal_system" >
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Gastrointestinal
+                        </div>
+                        <div class="card-body no-top-padding">
+                            <div class="clone-container">
+                                <div class="attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Palpation</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="palpation" id="palpation" placeholder="Palpation" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Percussion</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="percussion2" id="percussion2" placeholder="Percussion" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Ascites</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="ascites" id="ascites" placeholder="Ascites" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Splenomegaly</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="splenomegaly" id="splenomegaly" placeholder="Splenomegaly"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Hepatomegaly</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="hepatomegaly" id="hepatomegaly" placeholder="Hepatomegaly"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Tenderness</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="tenderness" id="tenderness" placeholder="Tenderness" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Hernia</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="hernia1" id="hernia1" placeholder="Hernia" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Skin Changes</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="skin_changes" id="skin_changes" placeholder="Skin Changes"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Swelling</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="swelling2" id="swelling2" placeholder="Swelling" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="genitourinary_system" >
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Genitourinary
+                        </div>
+                        <div class="card-body no-top-padding">
+                            <div class="clone-container">
+                                <div class="attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Skin Changes</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="skin_changes1" id="skin_changes1" placeholder="skin changes"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Phimosis</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="phimosis" id="phimosis" placeholder="Phimosis" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Paraphimosis</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="paraphimosis" id="paraphimosis" placeholder="Paraphimosis"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Hypospadias</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="hypospadias" id="hypospadias" placeholder="Hypospadias" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Undescended Tests</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="undescended_tests" id="undescended_tests"
+                                                placeholder="Undescended Tests" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Hernia</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="hernia2" id="hernia2" placeholder="Hernia" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="musculoskeletal_system" >
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Musculoskeletal
+                        </div>
+                        <div class="card-body no-top-padding">
+                            <div class="clone-container">
+                                <div class="attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Skin Changes</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="skin_changes2" id="skin_changes2" placeholder="skin changes"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Joint Swelling</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="joint_swelling" id="joint_swelling" placeholder="joint swelling"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Tenderness</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="tenderness" id="tenderness" placeholder="Tenderness" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Deformity</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="deformity" id="deformity" placeholder="Deformity" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Restricted Mobility</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="restricted_mobility" id="restricted_mobility"
+                                                placeholder="Restricted Mobility" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Reflexes</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="reflexes" id="reflexes" placeholder="Reflexes" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="nervous_system" >
+                    <div class="card">
+                        <div class="card-header bg-white text-theme border-0 fw-bold fs-6">
+                            Nervous
+                        </div>
+                        <div class="card-body no-top-padding">
+                            <div class="clone-container">
+                                <div class="attr-row">
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Speech</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="speech" id="speech" placeholder="speech" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Power of Limbs</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="power_limbs" id="power_limbs" placeholder="power of limbs"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Touch Sensation</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="touch_sensation" id="touch_sensation"
+                                                placeholder="touch sensation" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Knee Jerk Reflex</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="knee_jerk_reflex" id="knee_jerk_reflex"
+                                                placeholder="Knee Jerk Reflex" value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Ankle Reflex</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="ankle_reflex" id="ankle_reflex" placeholder="Ankle Reflex"
+                                                value="">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label class="fw-normal">Cranial Nerves
+                                                Examination</label>
+                                            <input type="text" class="form-control form-control-sm "
+                                                name="cranial_examination" id="cranial_examination"
+                                                placeholder="cranial nerves examination" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3 justify-content-between">
+                    <div class="col-9"></div>
+                    <div class="col-2">
+                        <button type="submit" class="btn btn-danger btn-sm fw-bold px-4 ">Save</button>
+                        <button type="reset" class="btn fw-bold btn-sm float-end btn-theme px-3">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        // Chief Complaint History
+        $("#addChief").on("click", function () {
+            $("#more-Chief").append("<div class='chief_complaint_history attr-row mt-3'><div class='row'><div class='col-sm-4 mb-4'><label class='fw-normal'>Problem</label><input type='text' class='form-control form-control-sm ' placeholder='Problem' name='problem' id='problem' /> </div> <div class='col-sm-8 mb-4'></div></div> <div class='row g-3'><div class='col-sm-3'><label class='fw-normal'>Onset</label> <input type='text' class='form-control form-control-sm ' placeholder='onset' name='onset' id='onset' /> </div><div class='col-sm-3'><label class='fw-normal'>site</label><input type='text' class='form-control form-control-sm ' placeholder='site' name='site' id='site'/>  </div><div class='col-sm-3'> <label class='fw-normal'>Progression</label><input type='text' class='form-control form-control-sm ' placeholder='progression' name='progression' id='progression'/> </div> <div class='col-sm-3'> <label class='fw-normal'>Duration</label><input type='text' class='form-control form-control-sm ' placeholder='duration' name='duration' id='duration' /></div><div class='col-sm-3'> <label class='fw-normal'>Frequency</label><input type='text' class='form-control form-control-sm ' placeholder='frequency' name='frequency' id='frequency' /></div><div class='col-sm-3'><label class='fw-normal'>Color</label><input type='text' class='form-control form-control-sm ' placeholder='color' name='color' id='color' /></div><div class='col-sm-3'><label class='fw-normal'>Grade</label><input type='text' class='form-control form-control-sm ' placeholder='grade' name='grade' id='grade' /></div><div class='col-sm-3'><label class='fw-normal'>Radiating to</label><input type='text' class='form-control form-control-sm ' placeholder='radiating to' name='radiatingto' id='radiatingto' /></div><div class='col-sm-3'><label class='fw-normal'>Relieving factor</label><input type='text' class='form-control form-control-sm ' placeholder='relieving factor' name='relieving_factor' id='relieving_factor' /></div><div class='col-sm-3'><label class='fw-normal'>Aggravating factor</label><input type='text' class='form-control form-control-sm ' placeholder='aggravating factor' name='aggravating_factor' id='aggravating_factor' /></div><div class='col-sm-3'> <label class='fw-normal'>Smell</label> <input type='text' class='form-control form-control-sm ' placeholder='smell' name='smell' id='smell' /></div></div></div>");
+        });
+        $("#removeChief").on("click", function () {
+            $("#more-Chief").children().last().remove();
+        });
+        // Past Medical History
+
+
+        $("#addPast").on("click", function () {
+            $("#more-Past").append("<div class='past_medical_history attr-row mt-3'><div class='row g-3'><div class='col-sm-6'><label class='fw-normal'>Past Disease</label><input type='text' class='form-control form-control-sm ' name='past_disease' placeholder='Problem'> </div> <div class='col-sm-6'> <label class='fw-normal'>Disease Details</label> <input type='text' class='form-control form-control-sm ' name='disease_details' placeholder='disease details'>  </div> </div> </div>");
+        });
+        $("#removePast").on("click", function () {
+            $("#more-Past").children().last().remove();
+        });
+        // Family History  
+        $("#addFamily").on("click", function () {
+            $("#more-Family").append("<div class='family_history attr-row mt-3'> <div class='row g-3'><div class='col-sm-6'><label class='fw-normal'>Disease</label> <input type='text' class='form-control form-control-sm ' name='disease' placeholder='Problem'> </div> <div class='col-sm-6'> <label class='fw-normal'>Disease Details</label>  <select class='form-control form-control-sm' name='disease_details1'> <option value='- Relation -'>- Relation -</option><option value='Father'>Father</option> <option value='Mother'>Mother</option> <option value='Grand Father'>Grand Father</option> <option value='Grand Mother'>Grand Mother</option><option value='Husband'>Husband</option><option value='Wife'>Wife</option><option value='Brother'>Brother</option><option value='Sister'>Sister</option><option value='Son' >Son</option><option value='Daughter' >Daughter</option><option value='Uncle' >Uncle</option><option value='Aunt' >Aunt</option>  </select> </div> </div> </div>");
+        });
+        $("#removeFamily").on("click", function () {
+            $("#more-Family").children().last().remove();
+        });
+
+    });
+</script>
+{% endblock %}

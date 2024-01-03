@@ -1,0 +1,58 @@
+from django.contrib import admin
+from Clinic.models.clinic import (
+    Mst_Clinic,
+    MstFlag,
+    Mst_Clinic_Center,
+    Mst_Clinic_Address,
+    Mst_Clinic_Contact,
+    Mst_Clinic_Document,
+    Mst_Clinic_BankDetails,
+    Tbl_ThirdPartyCollab,
+)
+from Clinic.models.MedicalHistory import (
+    ChiefComplaint,
+    PastMedicalHistory,
+    PersonalHistory,
+    FamilyHistory,
+    CardiovascularSymptoms,
+    NervousSystemSymptoms,
+    MusculoskeletalSymptoms,
+    GenitourinarySymptoms,
+    GastrointestinalSymptoms,
+    RespiratorySymptoms,
+    EndocrineSymptoms,
+    GpeDetails,
+    CardiovascularSystem,
+    RespiratorySystem,
+    GastrointestinalSystem,
+    GenitourinarySystem,
+    MusculoskeletalSystem,
+    NervousSystem,
+)
+
+admin.site.register(Mst_Clinic)
+admin.site.register(MstFlag)
+admin.site.register(Mst_Clinic_BankDetails)
+admin.site.register(Mst_Clinic_Center)
+admin.site.register(Mst_Clinic_Address)
+admin.site.register(Mst_Clinic_Contact)
+admin.site.register(Mst_Clinic_Document)
+admin.site.register(Tbl_ThirdPartyCollab)
+admin.site.register(ChiefComplaint)
+admin.site.register(PastMedicalHistory)
+admin.site.register(PersonalHistory)
+admin.site.register(FamilyHistory)
+admin.site.register(CardiovascularSymptoms)
+admin.site.register(NervousSystemSymptoms)
+admin.site.register(MusculoskeletalSymptoms)
+admin.site.register(GenitourinarySymptoms)
+admin.site.register(GastrointestinalSymptoms)
+admin.site.register(RespiratorySymptoms)
+admin.site.register(EndocrineSymptoms)
+admin.site.register(GpeDetails)
+admin.site.register(CardiovascularSystem)
+admin.site.register(RespiratorySystem)
+admin.site.register(GastrointestinalSystem)
+admin.site.register(GenitourinarySystem)
+admin.site.register(MusculoskeletalSystem)
+admin.site.register(NervousSystem)
