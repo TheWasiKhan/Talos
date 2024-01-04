@@ -1,0 +1,1083 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}Patient Registration {% endblock %}
+{% block Style %}
+<style>
+  .navbar a {
+    color: white;
+  }
+
+  .navbar-nav a {
+    color: white;
+  }
+
+  .theme {
+    background-color: #003a70
+  }
+
+
+  .nav-tabs {
+    border-bottom: solid red 1px;
+    ;
+  }
+
+  .nav-tabs .nav-item .nav-link.active {
+
+    background: linear-gradient(to bottom, white 95%, white 5%);
+    color: #6ecbc9;
+    border-top: solid red 1px;
+    border-left: solid red 1px;
+    border-right: solid red 1px;
+    border-bottom: solid white 2px;
+
+  }
+
+
+  .nav-tabs .nav-item .nav-link {
+    background: linear-gradient(to bottom, #6ecbc9 95%, #F9F9F9 5%);
+    border-bottom: solid #F9F9F9 1px;
+    color: white;
+    background-color: #6ecbc9;
+  }
+
+  /* .nav-item a,i{
+              color: white;
+
+            } */
+
+  button :hover {
+    background-color: #018383;
+  }
+
+
+  .formlabelcolor {
+    color: #003a70;
+  }
+
+  /* For small devices, set overflow-y to auto */
+  @media (max-width: 768px) {
+    body {
+      overflow-y: auto;
+      }
+      .nav-item{
+        width: 100%;
+      }
+
+  }
+
+  /* For medium devices, set overflow-y to auto */
+  @media (max-width: 992px) {
+    body {
+      overflow-y: auto;
+    }
+    .nav-item{
+    width: 50%;
+    }
+    .nav-item > a{
+    font-size: .75rem !important;
+    word-wrap:break-word;
+    }
+  }
+
+  /* For large devices and above, set overflow-x and overflow-y to hidden */
+  @media (min-width: 992px) {
+    body {
+      overflow-x: hidden;
+
+    }
+    {% comment %} .tab-content {
+      height: 170px; /* Adjust the height as needed */
+      overflow-y: auto;
+      overflow-x: hidden;
+    } {% endcomment %}
+    .tablecontent{
+      height: 270px;
+      overflow-y: scrollable;
+      overflow-x: hidden;
+    }
+  }
+  @media (max-width: 768px) {
+
+      /* Styles for small screens */
+    #column1,
+    #column2
+
+    {
+      /* Reset the heights to auto for medium and larger screens */
+      height: auto !important;
+    }
+  }
+
+
+  .changetext {
+    border: solid #c4ccd1 1px;
+  }
+
+  .backgroundgradient {
+    background: linear-gradient(45deg, #6ecbc9, #003a70);
+
+    color: white;
+    transition: all;
+  }
+
+  .backgroundgradient:hover {
+    background: linear-gradient(45deg, #003a70, #ec0909);
+    color: white;
+  }
+
+  td {
+    text-align: center;
+  }
+
+
+
+
+  .btncolor {
+    background-color: #018383;
+  }
+
+  ::-webkit-scrollbar-track {
+
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+
+    background-color: white;
+
+    border-radius: 10px;
+
+  }
+
+
+
+  ::-webkit-scrollbar {
+
+    width: 10px;
+
+    height: 10px;
+
+    background-color: #F5F5F5;
+
+  }
+
+
+
+  ::-webkit-scrollbar-thumb {
+
+    border-radius: 10px;
+
+    background-color: #FFF;
+
+    background-image: -webkit-linear-gradient(top,
+
+        #003a70 0%,
+
+        #6ecbc9 50%,
+
+        #6ecbc9 51%,
+
+        #003a70 100%);
+
+
+
+   }
+  #fileInput {
+      visibility: hidden;
+    }
+
+  #file-label {
+    display: inline-block;
+    padding: 5px;
+    background-color: white;
+    color:#6ecbc9 ;
+    cursor: pointer;
+  }
+
+  #file-icon {
+    display: inline-block;
+    font-size: 1.5em; /* Adjust the font size as needed */
+    color: #0880a4;
+    cursor: pointer;
+  }
+
+</style>
+
+{%endblock%}
+{% block body %}
+{% load static %}
+
+    {% include 'base_menu_2.html' %}
+
+
+
+<form method="POST"   enctype="multipart/form-data" id="pform" class="needs-validation" onsubmit="checkRequiredFields(this)" >
+    {% csrf_token %}
+    <div class="row g-2  m-1 align-items-stretch">
+      <div class=" col-lg-2  col-md-4 col-sm-6 ">
+        <div class="card shadow border border-danger rounded rounded-2 " id="column1">
+          <div class="card-body ">
+            <div class="d-flex flex-column align-items-center text-center">
+              <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle"
+                width="80" />
+              <div class="mt-3">
+                <label for="pid">ID:{{request.user.id}}</label>
+
+                <h4 class="mb-0 " style="color: #6ecbc9;"> {{request.user.first_name}} {{request.user.last_name}}</h4>
+                <h6 class="fw-semibold formlabelcolor mb-0">{{request.user.profession.name}}</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-10  col-md-8 col-sm-12">
+        <div class="card shadow " id="column2">
+          <div class="card-header" style="background-color:white">
+            <h5 class="formlabelcolor mb-0"><span class="mb-0"><img src="{% static 'Talos/icon/patientreg.png' %}" width="25px"
+                  alt="onboarding"></span> Patient Registration</h5>
+          </div>
+          <div class="card-body table-responsive border border-danger rounded rounded-2 m-0">
+            <div class="row g-3 justify-content-around   align-items-stretch  ">
+              <div class="col-1  ">
+                <div class="d-flex flex-column  align-items-center text-center">
+
+                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle "
+                    width="70px" height="70px" id="previewImage" name="previewImage">
+                    <label for="fileInput" id="file-label"><span class="text-danger">*</span>
+                      <i class="fas fa-camera fa-lg" id="file-icon" title="Upload Picture"></i>
+                    </label>
+                    <input type="file" id="fileInput" name="fileInput" onchange="displayFileName()">
+                  </div>
+                </div>
+
+              <div class="col-lg-10 col-md-8 col-sm-6">
+                <div class="row  justify-content-around">
+                  <div class="col-lg-3 col-md-4 mb-lg-2 col-sm-12">
+                    <h6 class="card-title  p-0 m-0 "><span class="formlabelcolor fw-bold">Contact Number</span></h6>
+
+                    <input type="text" class="form-control form-control-sm changetext p-0 m-0"
+                      value="{{request.user.phone}}" name="contactno" maxlength="10" minlength="10" readonly>
+
+                  </div>
+                  <div class="col-lg-3 col-md-4 mb-lg-2 col-sm-12">
+                    <h6 class="card-title p-0 m-0 "><span class="formlabelcolor fw-bold">Email</span></h6>
+
+
+                    <input type="email" class="form-control form-control-sm changetext m-0 p-0"
+                      value=" {{request.user.email}}" name="emailid" readonly >
+
+                  </div>
+                  <div class="col-lg-3 col-md-4 mb-lg-2 col-sm-12">
+                    <h6 class="card-title p-0 m-0 formlabelcolor fw-bold">Date of Birth<span class="text-danger">*</span></h6>
+                     <input type="date" class="form-control form-control-sm changetext m-0  p-0" value="" name="age" id ="age" required>
+
+                  </div>
+
+                </div>
+                <div class="row mt-1 justify-content-around ">
+                  <div class="col-lg-3  col-md-4 mb-lg-2 col-sm-12">
+                    <h6 class="card-title p-0 m-0 formlabelcolor fw-bold">First Name  <span
+                      class="text-danger">*</span></h6>
+                    <input type="text" class="form-control form-control-sm p-0 m-0" value="" name="firstname" required>
+                  </div>
+                  <div class="col-lg-3 col-md-4 mb-lg-2 col-sm-12">
+                    <h6 class="card-title p-0 m-0"><span class="formlabelcolor fw-bold "> Middle Name</span></h6>
+
+
+                    <input type="text" class="form-control form-control-sm p-0 m-0" value="" name="middlename">
+                  </div>
+                  <div class="col-lg-3 col-md-4  mb-lg-2 col-sm-12">
+                    <h6 class="card-title  p-0 m-0 formlabelcolor fw-bold">Last Name <span
+                      class="text-danger">*</span></h6>
+                    <input type="text"  class="form-control form-control-sm p-0 m-0" value="" name="lastname" required>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-2 m-1 align-items-stretch " >
+      <div class=" col-lg-2  col-md-4 col-sm-6 ">
+        <div class="card shadow border border-danger rounded rounded-2 " id="column3">
+          <div class="card-header  fw-semibold  text-white" style="background-color: #6ecbc9;"><img src="{% static 'Talos/icon/editview.png' %}" width="22px" alt="name"> View/Edit
+          </div>
+          <div class="card-body tablecontent">
+            <table class="table table-responsive ">
+              <tbody class="" >
+            {% if msg %}
+            <div class="alert alert-{{al}} alert-dismissible fade show "  id="status" role="alert">
+              <button type="button" class="btn-close " data-bs-dismiss="alert" aria-label="Close"></button>
+              <h6>{{msg}}</h6>
+
+            </div>
+            {% endif %}
+                {% for patient in obj %}
+                  <tr class="d-flex">
+                    <td class="p-0 float-start">
+                        <span class="btn btn-outline-light btn-sm "><input type="radio" name="selectPatient" value="{{patient.PatientID}}" data-bs-toggle="modal" data-bs-target="#vieweditpatient" ></span>
+                    </td>
+                    <td class="p-0">
+                       <img src="{{patient.PatientProfileImage}} "
+                         class="img-fluid md rounded-circle img-thumbnail" width="20px" alt="Patient1">
+                    </td>
+                    <td class=""> <span> <td>{{ patient.FirstName }} {{ patient.MiddleName|default:'' }} {{ patient.LastName }} </span></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-10  col-md-8 col-sm-12   ">
+        <div class="card-body " style="background-color: #F9F9F9;" id="column4">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active  fw-bold " data-bs-toggle="tab" href="#Primary_Information"> <span
+                  class=" "><img src="{% static 'Talos/icon/primaryinfo.png' %}" alt="" width="24px"></span> Primary Information</a>
+            </li>
+
+            <li class="nav-item ps-1">
+              <a class="nav-link  fw-bold   " data-bs-toggle="tab" href="#Contact_Details"> <span class=" "><img
+                    src="{% static 'Talos/icon/contactdetails.png' %}" alt="" width="24px"></span> Contact Details</a>
+            </li>
+
+            <li class="nav-item ps-1">
+              <a class="nav-link fw-bold " data-bs-toggle="tab" href="#Medical_History"><span class=""><img
+                    src="{% static 'Talos/icon/medicalhistory.png' %}" alt="" width="24px"></span> Medical History</a>
+            </li>
+            <li class="nav-item ps-1">
+              <a class="nav-link  fw-bold" data-bs-toggle="tab" href="#Others"><span class=""><img
+                    src="{% static 'Talos/icon/payments.png' %}" alt="" width="24px"></span> Payments</a>
+            </li>
+
+          </ul>
+          <div class="tab-content border border-danger border-top-0 p-1 rounded rounded-top-0 rounded-bottom-3 bg-white"
+            id="">
+            <div class="tab-pane fade show active mx-1" id="Primary_Information" role="tabpanel"
+              aria-labelledby="primary-info-tab">
+              <!-- Content for Primary Information  -->
+              <div class="row ">
+                <div class="col-lg-6 col-md-12 ">
+                  <div class="card border-0">
+                    <div class="card-body">
+                      <div class="row  ">
+                        <div class="col-lg-6 col-md-6">
+                          <label for="gender" class="form-label mb-0 formlabelcolor">Gender <span
+                              class="text-danger">*</span></label>
+                          <select name="gender" id="gender" class="form-select form-select-sm changetext" required>
+                            <option selected>Select</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Others</option>
+                          </select>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                          <label for="patientbloodgroup" class="form-label mb-0 formlabelcolor">Blood Group</label>
+                          <select name="patientbloodgroup" class="form-select form-select-sm changetext "
+                            id="patientbloodgroup" >
+                            <option selected value="">Choose </option>
+                            <option>O+</option>
+                            <option>O-</option>
+                            <option>A+</option>
+                            <option>A-</option>
+                            <option>B+</option>
+                            <option>B-</option>
+                            <option>AB+</option>
+                            <option>AB-</option>
+                          </select>
+                        </div>
+
+                      </div>
+                      <div class="row my-2">
+                        <div class="col-lg-6 col-md-6">
+                          <label for="nationality" class="form-label mb-0 formlabelcolor">Nationality</label>
+                          <input type="text" name="nationality" id="nationality"
+                            class="form-control form-control-sm changetext" >
+                        </div>
+                        <div class="col-lg-6 col-md-6 ">
+                          <label for="aadhar" class="form-label mb-0 formlabelcolor">Aadhar Number/SSN No. <span
+                              class="text-danger">*</span></label>
+                          <input type="text" name="aadhar" id="aadhar" class="form-control form-control-sm changetext" maxlength="12" minlength="12" required>
+                        </div>
+                      </div>
+                      <div class="row mt-2">
+                        <div class="col-lg-6 col-md-6">
+                          <label for="maritals" class="form-labelmb-0 formlabelcolor">Marital Status</label>
+                          <select name="maritals" class="form-select form-select-sm changetext" id="maritals" >
+                            <option selected value="">Choose </option>
+                            <option>Single</option>
+                            <option>Married</option>
+                          </select>
+                        </div>
+                        <div class="col-lg-6 col-md-6 ">
+                          <label for="spousename" class="form-label mb-0 formlabelcolor">Spouse Name/Husband Name</label>
+                          <input type="text" name="spousename" id="spousename"
+                            class="form-control form-control-sm changetext" >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-12 ">
+                  <div class="card border-0">
+                    <div class="card-body">
+                      <div class="row ">
+                        <div class="col-lg-12 col-md-10 ">
+                          <label for="address" class="form-label mb-0 formlabelcolor">Address <span
+                            class="text-danger">*</span></label>
+                          <textarea id="address" name="address" class="form-control changetext" placeholder=""
+                            id="floatingTextarea" rows="1" required></textarea>
+                        </div>
+                      </div>
+                      <div class="row  my-2">
+                        <div class="col-lg-6 col-md-6">
+                          <label for="city" class="form-label mb-0 formlabelcolor">City</label>
+                          <input type="text" name="city" id="city" class="form-control form-control-sm changetext" >
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                          <label for="state" class="form-label mb-0 formlabelcolor">State </label>
+                          <input type="text" name="state" id="state" class="form-control form-control-sm changetext"
+                            >
+                        </div>
+                      </div>
+                      <div class="row  mt-2">
+                        <div class="col-lg-6 col-md-6 ">
+                          <label for="pincode" class="form-label mb-0 formlabelcolor">Pincode <span
+                            class="text-danger">*</span></label>
+                          <input type="text" name="pincode" id="pincode" maxlength="6" minlength="6" class="form-control form-control-sm changetext" required pattern="\d{6}"
+                            >
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                          <label for="country" class="form-label mb-0 formlabelcolor">Country <span
+                            class="text-danger">*</span></label>
+                          <input type="text" name="country" id="country" class="form-control form-control-sm changetext"
+                            >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row justify-content-end">
+                <div class="col">
+                  <button type="button" class="btn btn-primary fw-bold float-end mt-1 theme"
+                    onclick="proceedToNextTab()">Next <i class="fas fa-chevron-right text-white"></i></button>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade m-1" id="Contact_Details" role="tabpanel" aria-labelledby="contact-details-tab">
+              <!-- Content for Contact Details -->
+              <div class="row justify-content-around">
+
+                <div class="col-md-4 col-lg-3">
+
+                  <label for="patcontactno" class="form-label formlabelcolor">Patient Contact Number </label>
+
+                  <input type="tel" name="patcontactno" id="patcontactno" class="form-control form-control-sm changetext" pattern="[0-9]{1}[0-9]{9}" maxlength="13" minlength="13" >
+
+                </div>
+                <div class="col-md-4 col-lg-3">
+
+                  <label for="occupation" class="form-label formlabelcolor"> Occupation  </label>
+
+                  <input type="tel" name="occupation" id="occupation" class="form-control form-control-sm changetext">
+                </div>
+                <div class="col-lg-3 col-md-4">
+
+                    <label for="patemail" class="form-label formlabelcolor"> Email ID</label>
+
+                    <input type="text" name="patemail" id="patemail" class="form-control form-control-sm changetext"  pattern=".+@.+\..+">
+                  </div>
+              </div>
+
+              <div class="row justify-content-around">
+
+              <h6 class="text-primary ms-3"> Emergency Contact Details</h6>
+              <hr>
+                <div class="col-md-4 col-lg-3" >
+
+                  <label for="emgname" class="form-label formlabelcolor"> Contact Person Name  </label>
+                  <input type="text" name="emgname" id="emgname" class="form-control form-control-sm changetext" >
+
+                </div>
+                <div class="col-md-4 col-lg-3">
+
+                  <label for="emgcontact" class="form-label formlabelcolor"> Contact Number</label>
+
+                  <input type="text" name="emgcontact" id="emgcontact" class="form-control form-control-sm changetext" pattern="[0-9]{1}[0-9]{9}" maxlength="13" minlength="13" >
+
+
+                </div>
+                <div class="col-md-4 col-lg-3">
+
+                  <label for="emgcontactrelation" class="form-label formlabelcolor"> Contact Relation</label>
+
+                  <select name="emgcontactrelation" class="form-select form-select-sm changetext" id="emgcontactrelation" >
+                    <option selected value="">Choose </option>
+                    <option value="Parent">Parent</option>
+                    <option value="Sibling">Sibling</option>
+                    <option value="Spouse/Partner">Spouse/Partner</option>
+                    <option value="Child">Child</option>
+                    <option value="Friend">Friend</option>
+                    <option value="Other">Other</option>
+                  </select>
+
+                </div>
+              </div>
+              <div class="row justify-content-end">
+                <div class="col">
+
+                  <button type="button" class="btn btn-primary fw-bold float-end mt-3  mx-2 theme"
+                    onclick="proceedToNextTab()">Next <i class="fas fa-chevron-right text-white"></i></button>
+
+                  <button type="button" class="btn btn-outline fw-bold float-end mt-3"
+                    style="background-color: #ced4da;" onclick="Backtoprevioustab()"><i
+                      class="fas fa-chevron-left text-dark"></i> Back
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade mx-1" id="Medical_History" role="tabpanel" aria-labelledby="medical-history-tab">
+              <div class="row my-2 g-2 ">
+                <div class="col-lg-12 table-responsive">
+                  <table id="medicalhistorytable" class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>SNo.</th>
+                        <th>Pre-existing Condition</th>
+                        <th>Description<span class="formlabelcolor"></span></th>
+                        <th>Upload Medical Record<span class="  formlabelcolor">*</span>
+                        </th>
+                        <th>Remarks<span class="formlabelcolor"></span></th>
+
+
+
+                        <th colspan="2"> Actions</th> <!-- Plus Button Column -->
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td><input type="text" name="pretype" class="form-control form-control-lg fs-6 changetext" ></td>
+                        <td><input type="text" name="descrptn" class="form-control form-control-lg fs-6 changetext" ></td>
+
+                        <td><input type="file" name="medrec" class="form-control changetext" ></td>
+                        <td><input type="text" name="remarks" class="form-control  changetext" ></td>
+
+
+
+                        <td class=""><button type="button" class="btn btn-sm btn-primary theme  add-row "><i
+                              class="fa-solid fa-plus fa-lg"></i></button></td>
+                        <!-- Plus Button -->
+                        <td class=""><button type="button" class="btn btn-danger btn-sm remove-row" disabled><i
+                              class="fas fa-trash-alt fa-lg "></i></button>
+                        </td>
+                        <!-- Minus Button (disabled) -->
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+              </div>
+              <div class="row justify-content-end">
+                <div class="col">
+
+                  <button type="button" class="btn btn-primary fw-bold float-end mt-3  mx-2 theme"
+                    onclick="proceedToNextTab()">Next <i class="fas fa-chevron-right text-white"></i></button>
+
+                  <button type="button" class="btn btn-outline fw-bold float-end mt-3"
+                    style="background-color: #ced4da;" onclick="Backtoprevioustab()"><i
+                      class="fas fa-chevron-left text-dark"></i> Back
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane  fade m-1" id="Others" role="tabpanel" aria-labelledby="others-tab">
+              <div class="row ">
+                <div class="col-md-6 col-lg-3">
+                  <label for="paymenttype" class="form-label formlabelcolor ">Payment Type  <span class="required_asterisk text-danger">*</span></label>
+                  <select name="paymenttype" class="form-select changetext" id="paymenttype"
+                    onchange="handlePaymentChange()" required>
+                    <option Selected>Select</option>
+
+                    <option value="Insurance">Insurance</option>
+                    <option value="Self">Self</option>
+                    <!-- <option value="Ayushman">Ayushman</option> -->
+                  </select>
+                </div>
+                <div class="col-md-6 col-lg-3" style="display: none;" id="paymentMethodContainer">
+                  <label for="paymentmode" class="form-label formlabelcolor">Mode Of Payment</label>
+                  <select name="paymentmode" class="form-select changetext" id="paymentmode"
+                    onchange="handleselfchange()">
+                    <option value="">Select</option>
+
+                    <option value="Credit/Debit">Credit/Debit</option>
+                    <option value="UPI">UPI</option>
+                    <option value="Net Banking">Net Banking</option>
+                    <option value="Cash">Cash</option>
+                  </select>
+                </div>
+                <div id="Insurance" style="display: none;">
+                  <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                      <label for="insurancename" class="form-label formlabelcolor">Insurance Name </label>
+                      <input type="text" name="insurancename" id="insurancename" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                      <label for="insuranceno" class="form-label formlabelcolor">Insurance No </label>
+                      <input type="text" name="insuranceno" id="insuranceno" class="form-control form-control-sm">
+                    </div>
+                    <div  class="col-lg-3 col-md-6">
+                      <label for="typeinsurance" class="form-label formlabelcolor">Insurance Type</label>
+                      <select name="typeinsurance" id="typeinsurance" class="form-select">
+                        <option value="Private">Private</option>
+                        <option value="Corporate">Corporate</option>
+                        <option value="Govt. Panel">Govt.Panel</option>
+                        <option value="Ayushman">Ayushman</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row justify-content-between">
+                <div class="col">
+                  <button type="submit" class="btn btn-primary  float-end mt-3 mx-2 theme">Submit</button>
+                  <button type="button" class="btn btn-outline fw-bold float-end mt-3" onclick="Backtoprevioustab()"
+                    style="background-color: #ced4da;"><i class="fas fa-chevron-left text-dark"></i> Back
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+  <form action="{%url 'edit_patient_details'%}" method="POST">
+    <div class="modal fade" id="vieweditpatient" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      {% csrf_token%}
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+          <h1 class="modal-title fs-5 formlabelcolor" id="exampleModalLabel">View/Edit Details</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <h6 style="color: #6ecbc9;">Primary Information</h6>
+            <div class="card body mb-1">
+              <div class="row m-1">
+                <div class="col">
+
+                  <label for="mfullname" class="form-label mb-0 formlabelcolor">Full Name </label>
+                  <input type="text" class="form-control" name="mfullname" id="mfullname" value="" placeholder="Shivi" >
+                </div>
+                <div class="col">
+                  <label for="mGender" class="form-label mb-0 formlabelcolor">Gender</label>
+                  <select name="mGender" id="mGender" class="form-select form-select-sm changetext">
+                    <option selected>Select</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Others</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="mage" class="form-label mb-0 formlabelcolor">Date of Birth</label>
+                  <input type="date" class="form-control" name="mage" id="mage" value="" placeholder="23">
+                </div>
+              </div>
+              <div class="row m-1">
+                <div class="col">
+                  <label for="mbloodgroup" class="form-label mb-0 formlabelcolor">Blood Group </label>
+                  <select name="mbloodgroup" class="form-select form-select-sm changetext" id="mbloodgroup" >
+                            <option selected value="">Choose </option>
+                            <option>O+</option>
+                            <option>O-</option>
+                            <option>A+</option>
+                            <option>A-</option>
+                            <option>B+</option>
+                            <option>B-</option>
+                            <option>AB+</option>
+                            <option>AB-</option>
+                          </select>
+                </div>
+                <div class="col">
+                  <label for="gender" class="form-label mb-0 formlabelcolor">Email Id</label>
+                  <input type="text" class="form-control" name="memailid" id="memailid" value="" placeholder="shagrawal@gmail.com">
+                </div>
+                <div class="col">
+                  <label for="maadhar" class="form-label mb-0 formlabelcolor">Aadhar No</label>
+                  <input type="text" class="form-control" name="maadhar" id="maadhar" value="" placeholder="2311111111" >
+                </div>
+              </div>
+              <div class="row m-1">
+                <div class="col">
+                  <label for="mmaritalstatus" class="form-label mb-0 formlabelcolor">Marital Status </label>
+                  <select name="mmaritalstatus" class="form-select form-select-sm changetext" id="mmaritalstatus" >
+                    <option selected value="">Choose </option>
+                    <option>Single</option>
+                    <option>Married</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="mspousename" class="form-label mb-0 formlabelcolor">Spouse Name</label>
+                  <input type="text" class="form-control" name="mspousename" id="mspousename" value="" placeholder="Anil">
+                </div>
+                <div class="col">
+                  <label for="mcontactno" class="form-label mb-0 formlabelcolor">Contact No</label>
+                  <input type="text" class="form-control" name="mcontactno" id="mcontactno" value="" placeholder="2311111111" >
+                </div>
+              </div>
+            </div>
+            <h6 style="color: #6ecbc9;">Address Details</h6>
+            <div class="card body mb-1">
+              <div class="row m-1">
+                <div class="col">
+                  <label for="mnationality" class="form-label mb-0 formlabelcolor">Nationality</label>
+                  <input type="text" class="form-control" name="mnationality" id="mnationality" value="" placeholder="Indian">
+                </div>
+                <div class="col">
+                  <label for="maddress" class="form-label mb-0 formlabelcolor">Address</label>
+                  <input type="text" class="form-control" name="maddress" id="maddress" value="" placeholder="Bhopal">
+                </div>
+              </div>
+              <div class="row m-1">
+
+                <div class="col">
+                  <label for="mcity" class="form-label mb-0 formlabelcolor">City</label>
+                  <input type="text" class="form-control" name="mcity" id="mcity" value="" placeholder="Bhopal">
+                </div>
+                <div class="col">
+                  <label for="mstate" class="form-label mb-0 formlabelcolor">State </label>
+                  <input type="text" class="form-control" name="mstate" id="mstate" value="" placeholder="MP">
+                </div>
+              </div>
+              <div class="row m-1">
+                <div class="col">
+                  <label for="mcountry" class="form-label mb-0 formlabelcolor">Country </label>
+                  <input type="text" class="form-control" name="mcountry" id="mcountry" value="" placeholder="India">
+                </div>
+                <div class="col">
+                  <label for="mpin" class="form-label mb-0 formlabelcolor">Pin Code</label>
+                  <input type="text" class="form-control" name="mpin" id="mpin" value="" placeholder="">
+                </div>
+              </div>
+            </div>
+              <h6 style="color: #6ecbc9;">Contact Details</h6>
+              <div class="card body mb-1">
+                <div class="row m-1">
+
+                  <div class="col">
+                    <label for="memergencypersonname" class="form-label mb-0 formlabelcolor">Emergency Contact Person Name</label>
+                    <input type="text" class="form-control" name="memergencypersonname" id="memergencypersonname" value="" placeholder="Aditya">
+                  </div>
+                </div>
+                <div class="row m-1">
+
+                  <div class="col">
+                    <label for="emcontactno" class="form-label mb-0 formlabelcolor">Contact No</label>
+                    <input type="text" class="form-control" name="emcontactno" id="emcontactno" value="" placeholder="0990909090">
+                  </div>
+                  <div class="col">
+                    <label for="mrelation" class="form-label mb-0 formlabelcolor">Contact Relation </label>
+                    <input type="text" class="form-control" name="mrelation" id="mrelation" value="" placeholder="Friend">
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <input type="hidden" name="patientid" id="patientid" value="" class="form-control">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+  <!-- Proceed Next -->
+   <script>
+     function proceedToNextTab() {
+       let currentTab = $('.tab-content .active').attr('id');
+       let nextTab;
+
+       switch (currentTab) {
+         case 'Primary_Information':
+           nextTab = 'Contact_Details';
+           break;
+         case 'Contact_Details':
+           nextTab = 'Medical_History';
+           break;
+         case 'Medical_History':
+           nextTab = 'Others';
+           const requiredFields = document.querySelectorAll('[required]');
+
+       // Flag to check if all required fields are filled
+       let allFieldsFilled = true;
+
+    // Loop through each required field
+    requiredFields.forEach(field => {
+      if (field.value.trim() === '') {
+        // If any required field is empty, set the flag to false
+        allFieldsFilled = false;
+
+
+        field.style.border = '1px dashed red';
+      } else {
+        // Clear any previous highlighting
+        field.style.border = '';
+      }
+    });
+
+      // If all required fields are filled, proceed to the next tab
+      if (allFieldsFilled) {
+        // Your code to proceed to the next tab goes here
+        console.log('Proceeding to the next tab');
+      } else {
+        // Show an alert or message indicating that required fields are not filled
+        alert('Please fill out all required fields.');
+      }
+           break;
+
+         default:
+           return; // Exit if the current tab doesn't have a defined next tab
+       }
+
+
+
+       $(`[href="#${nextTab}"]`).tab('show');
+
+    }
+
+   </script>
+   <!-- Previous Next -->
+   <script>
+     function Backtoprevioustab() {
+       let curtab = $('.tab-content .active').attr('id');
+       let backtab;
+
+       switch (curtab) {
+         case 'Contact_Details':
+           backtab = 'Primary_Information';
+           break;
+         case 'Medical_History':
+           backtab = 'Contact_Details';
+           break;
+         case 'Others':
+           backtab = 'Medical_History';
+           break;
+         default:
+           return; // Exit if the current tab doesn't have a defined next tab
+       }
+
+
+       $(`[href="#${backtab}"]`).tab('show');
+     }
+
+   </script>
+
+
+
+     <!-- Payment Tab -->
+   <script>
+
+     var insuranceSection = document.getElementById("Insurance");
+     paymentMethodContainer.style.display = "none";
+     insuranceSection.style.display = "none";
+
+     function handlePaymentChange() {
+       var paymentType = document.getElementById("paymenttype").value;
+       var paymentMethodContainer = document.getElementById("paymentMethodContainer");
+
+
+
+       if (paymentType === "Self") {
+
+         paymentMethodContainer.style.display = "block";
+         insuranceSection.style.display = "none";
+       }
+       else if (paymentType === "Insurance") {
+         insuranceSection.style.display = "block";
+
+       }
+
+
+
+
+     }
+   </script>
+
+  <!-- Add Table -->
+  <script>
+
+     $(document).ready(function () {
+       // Attach the click event handler to the "+" button in the table with ID "educationtableble"
+       $("#medicalhistorytable").on("click", ".add-row", function () {
+         var rowCount = $("#medicalhistorytable tbody tr").length;
+         var newRow = '<tr>' +
+           '<td>' + (rowCount + 1) + '</td>' +
+           '<td><input type="text" name="pretype" class="form-control changetext"></td>' +
+           '<td><input type="text" name="descrptn" class="form-control changetext"></td>' +
+
+           '<td><input type="file" name="medrec" class="form-control changetext"></td>' +
+           '<td><input type="text" name="remarks" class="form-control  changetext"></td>' +
+
+
+           '<td class=""><button type="button" class="btn btn-sm btn-primary theme  add-row "><i class="fa-solid fa-plus fa-lg"></i></button></td>'
+           +
+           '<td><button type="button" class="btn btn-danger btn-sm remove-row"><i class="fas fa-trash-alt fa-lg "></i></button></td>' +
+           '</tr>';
+         $("#medicalhistorytable tbody").append(newRow);
+
+         // Enable minus button in the previous row
+         $(".remove-row").prop("disabled", false);
+
+         // Disable minus button in the first row when there's only one row
+         if (rowCount === 0) {
+           $(".remove-row:first").prop("disabled", true);
+         }
+       });
+
+       // Remove Row
+       $("#medicalhistorytable").on("click", ".remove-row", function () {
+         var rowCount = $("#medicalhistorytable tbody tr").length;
+         if (rowCount > 1) {
+           $(this).closest("tr").remove();
+           updateRowNumbers();
+
+           // Disable minus button in the first row when there's only one row left
+           if (rowCount === 2) {
+             $(".remove-row:first").prop("disabled", true);
+           }
+         }
+       });
+
+       // Update row numbers
+       function updateRowNumbers() {
+         $("#medicalhistorytable tbody tr").each(function (index) {
+           $(this).find("td:first").text(index + 1);
+         });
+       }
+     });
+
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var today = new Date().toISOString().split('T')[0];
+      document.getElementById('age').max = today;
+    });
+  </script>
+
+  <script>
+     const column1Height = document.getElementById("column1").offsetHeight;
+     const column2Height = document.getElementById("column2").offsetHeight;
+
+
+
+     // Set the height of both columns to the maximum height
+     const maxHeight = Math.max(column1Height, column2Height);
+     document.getElementById("column1").style.height = maxHeight + "px";
+     document.getElementById("column2").style.height = maxHeight + "px";
+
+  </script>
+
+
+
+
+
+   <script>
+     document.addEventListener('DOMContentLoaded', function () {
+       var radioButtons = document.querySelectorAll('input[name="selectPatient"]');
+
+       radioButtons.forEach(function (radioButton) {
+         radioButton.addEventListener('change', function () {
+           if (this.checked) {
+             var selectedValue = this.value;
+
+           }
+           var tableData = {{ obj | safe}};
+           for(let i=0; i < tableData.length; i++){
+             let valuesArray = Object.values(tableData[i])
+             if(selectedValue==valuesArray[0]) {
+               console.log('In IF')
+               document.getElementById('patientid').value=valuesArray[0]
+               document.getElementById('mfullname').value=valuesArray[1] + " " + valuesArray[2] + " " + valuesArray[3]
+               document.getElementById('mGender').value=valuesArray[4]
+               document.getElementById('mage').value=valuesArray[5]
+               document.getElementById('mbloodgroup').value=valuesArray[6]
+               document.getElementById('memailid').value=valuesArray[7]
+               document.getElementById('maadhar').value=valuesArray[8]
+               document.getElementById('mmaritalstatus').value=valuesArray[9]
+               document.getElementById('mspousename').value=valuesArray[10]
+               document.getElementById('mcontactno').value=valuesArray[11]
+               document.getElementById('mnationality').value=valuesArray[12]
+               document.getElementById('maddress').value=valuesArray[13]
+               document.getElementById('mcity').value=valuesArray[14]
+               document.getElementById('mstate').value=valuesArray[15]
+               document.getElementById('mcountry').value=valuesArray[16]
+               document.getElementById('mpin').value=valuesArray[17]
+               document.getElementById('malternateno').value=valuesArray[18]
+               document.getElementById('memergencypersonname').value=valuesArray[19]
+               document.getElementById('emcontactno').value=valuesArray[20]
+               document.getElementById('mrelation').value=valuesArray[21]
+
+             }
+
+            console.log(valuesArray[19],valuesArray[20])
+
+           }
+         });
+       });
+     });
+
+
+   </script>
+       <!-- Image Dialog -->
+   <script>
+    function displayFileName() {
+        const fileInput = document.getElementById('fileInput');
+        const fileLabel = document.getElementById('file-label');
+
+        if (fileInput.files.length > 0) {
+            const fileName = fileInput.files[0].name;
+            fileLabel.innerHTML = `<i class="fas fa-camera fa-lg" id="file-icon" style="color:#0880a4;" title="Upload Picture"></i> ${fileName}`;
+            var reader = new FileReader();
+
+          reader.onload = function (e) {
+            previewImage.src = e.target.result;
+            previewImage.style.display = 'block';
+
+
+          }
+            fileInput=fileName
+        }
+    }
+   </script>
+
+   <script>
+    (() => {
+      'use strict'
+
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      const forms = document.querySelectorAll('.needs-validation')
+
+      // Loop over them and prevent submission
+      Array.from(forms).forEach(form => {
+          form.addEventListener('submit', event => {
+              if (!form.checkValidity()) {
+                  event.preventDefault()
+                  event.stopPropagation()
+              }
+              showModal()
+              form.classList.add('was-validated')
+          }, false)
+      })
+  })()
+   </script>
+
+{% endblock %}
